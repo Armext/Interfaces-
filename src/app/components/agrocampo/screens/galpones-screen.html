@@ -1,0 +1,39 @@
+<div class="screen-stack">
+  <section class="screen-banner">
+    <div class="title-block"><span class="screen-icon">▤</span><div><div class="title-line"><h1>Galpones, Silos &amp; Almacenamiento Rural</h1><span class="title-badge">{{ data.facilities().length }} instalaciones activas</span></div><p>Control telemático de granos en acopio, insumos fitosanitarios y sensores de humedad</p></div></div>
+    <div class="banner-actions"><p-button label="Mover stock / remito" icon="pi pi-sort-alt" [outlined]="true" (onClick)="openStockMovement.emit()" /><p-button label="Cargar insumo / semilla" icon="pi pi-plus" (onClick)="openNewItem.emit()" /></div>
+  </section>
+
+  <section class="facility-grid" aria-label="Instalaciones">
+    @for (facility of data.facilities(); track facility.id) {
+      <button type="button" class="facility-card" [class.selected]="selectedFacilityId() === facility.id" (click)="selectFacility(facility)">
+        <span class="facility-icon">{{ facility.type.includes('Silo') ? '▥' : '▤' }}</span>
+        <span class="facility-heading"><strong>{{ facility.name }}</strong><span class="facility-status" [class.facility-alert]="facility.status !== 'Normal'">{{ facility.status }}</span></span>
+        <span class="facility-type">{{ facility.type }} · {{ facility.location }}</span>
+        <span class="capacity-label"><span>Capacidad utilizada</span><strong>{{ capacityPercent(facility) }}%</strong></span>
+        <span class="capacity-bar"><span [style.width.%]="capacityPercent(facility)"></span></span>
+        <span class="capacity-value">{{ facility.capacityUsed }} / {{ facility.capacityMax }} {{ facility.unit }}</span>
+        <span class="facility-sensors"><span>{{ facility.temperatureC }}°C</span><span>{{ facility.humidityPercent }}% humedad</span><span>{{ facility.itemsCount }} registros</span></span>
+      </button>
+    }
+  </section>
+
+  @if (selectedFacility(); as facility) {
+    <section class="panel inventory-panel">
+      <div class="panel-heading"><div><span class="eyebrow">Inventario y existencias</span><h2>{{ facility.name }}</h2></div><span class="soft-badge">{{ filteredInventory().length }} artículos</span></div>
+      <div class="table-toolbar">
+        <input pInputText type="search" placeholder="Buscar insumo o producto" [ngModel]="searchItem()" (ngModelChange)="searchItem.set($event)" />
+        <div class="category-filters" role="group" aria-label="Filtrar categoría">
+          @for (category of ['todos', 'Semillas', 'Fertilizantes', 'Fitosanitarios', 'Alimento & Rollos', 'Repuestos']; track category) {
+            <button type="button" [class.selected]="categoryFilter() === category" (click)="categoryFilter.set(category)">{{ category === 'todos' ? 'Todos' : category }}</button>
+          }
+        </div>
+      </div>
+      <p-table [value]="filteredInventory()" dataKey="id" [rowHover]="true" responsiveLayout="scroll">
+        <ng-template #header><tr><th>Producto / insumo</th><th>Categoría</th><th>Existencia</th><th>Lote</th><th>Vencimiento</th><th>Reposición</th><th></th></tr></ng-template>
+        <ng-template #body let-item><tr><td><strong>{{ item.name }}</strong></td><td><span class="soft-badge">{{ item.category }}</span></td><td><strong>{{ item.quantity }}</strong> {{ item.unit }}</td><td>{{ item.batch }}</td><td>{{ item.expirationDate }}</td><td>{{ item.reorderLevel }} {{ item.unit }}</td><td><p-button label="Mover" [text]="true" (onClick)="openStockMovement.emit()" /></td></tr></ng-template>
+        <ng-template #emptymessage><tr><td colspan="7" class="empty-state">No hay existencias para los filtros seleccionados.</td></tr></ng-template>
+      </p-table>
+    </section>
+  }
+</div>

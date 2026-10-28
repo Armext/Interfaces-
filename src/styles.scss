@@ -1,1 +1,252 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import 'primeicons/primeicons.css';
+
+:root {
+  color-scheme: light;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --agro-green: #176b45;
+  --agro-green-dark: #104d34;
+  --agro-ink: #18271e;
+  --agro-muted: #68766d;
+  --agro-border: #e9e7de;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+  color: var(--agro-ink);
+  background: #f7f6ef;
+  font-family: inherit;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+.p-component {
+  font-family: inherit;
+}
+
+.p-inputtext,
+.p-inputnumber-input {
+  color: #26382d;
+  background: #fff;
+}
+
+.p-inputtext:focus,
+.p-inputnumber-input:focus {
+  border-color: #67a27d;
+  outline: 3px solid #176b451c;
+}
+
+.p-button {
+  display: inline-flex;
+  min-height: 35px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border: 1px solid #176b45;
+  border-radius: 8px;
+  color: #fff;
+  background: #176b45;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.p-button.p-button-outlined,
+.p-button.p-button-text {
+  color: #176b45;
+  background: #fff;
+}
+
+.p-button:hover {
+  filter: brightness(.96);
+}
+
+.agro-dialog[data-pc-name='dialog'] {
+  overflow: hidden;
+  border: 1px solid #dce6df;
+  border-radius: 16px;
+  color: #1b2d23;
+  background: #fff;
+  box-shadow: 0 24px 70px #0d291c35;
+}
+
+[data-pc-section='mask']:has(.agro-dialog) {
+  background: #0b20158a;
+  backdrop-filter: blur(2px);
+}
+
+.agro-dialog [data-pc-section='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #edf1ee;
+  color: #173b28;
+  background: #fff;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.agro-dialog [data-pc-section='title'] {
+  line-height: 1.4;
+}
+
+.agro-dialog [data-pc-section='headeractions'] button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 0;
+  border-radius: 9px;
+  color: #53665a;
+  background: #f2f6f2;
+  cursor: pointer;
+}
+
+.agro-dialog [data-pc-section='headeractions'] button:hover {
+  color: #176b45;
+  background: #e8f2e9;
+}
+
+.agro-dialog [data-pc-section='content'] {
+  padding: 20px;
+  color: #1b2d23;
+  background: #fff;
+}
+
+.agro-dialog p-button [data-pc-name='button'] {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid #176b45;
+  border-radius: 9px;
+  color: #fff;
+  background: #176b45;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.agro-dialog p-button [data-pc-name='button']:hover {
+  border-color: #105437;
+  background: #105437;
+}
+
+.agro-dialog p-button [data-pc-name='button'][data-p='outlined'] {
+  color: #176b45;
+  background: #fff;
+}
+
+.agro-dialog p-button [data-pc-name='button'][data-p='outlined']:hover {
+  background: #f1f7f1;
+}
+
+.agro-dialog p-select[data-pc-name='select'] {
+  display: block;
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid #d8e2db;
+  border-radius: 9px;
+  color: #26382d;
+  background: #fff;
+  box-shadow: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.agro-dialog p-select[data-pc-name='select']:not([data-p-disabled='true']):hover {
+  border-color: #9ab9a2;
+}
+
+.agro-dialog p-select[data-pc-name='select'][data-p='focus'] {
+  border-color: #67a27d;
+  outline: none;
+  box-shadow: 0 0 0 3px #176b451c;
+}
+
+.agro-dialog p-select[data-pc-name='select'] [data-pc-section='label'] {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  padding: 9px 11px;
+  color: #26382d;
+  font: inherit;
+  font-size: 11px;
+}
+
+.agro-dialog p-select[data-pc-name='select'] [data-pc-section='dropdown'] {
+  display: flex;
+  width: 36px;
+  align-items: center;
+  justify-content: center;
+  color: #68766d;
+}
+
+.agro-dialog p-select[data-pc-name='select'] [data-pc-section='dropdownicon'] {
+  width: 18px;
+}
+
+.agro-select-panel[data-pc-section='overlay'] {
+  overflow: hidden;
+  border: 1px solid #dce6df;
+  border-radius: 11px;
+  color: #26382d;
+  background: #fff;
+  box-shadow: 0 12px 30px #0d291c24;
+}
+
+.agro-select-panel [data-pc-section='list'] {
+  display: grid;
+  gap: 2px;
+  padding: 5px;
+}
+
+.agro-select-panel [data-pc-section='option'] {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 9px 10px;
+  border-radius: 7px;
+  color: #344238;
+  background: transparent;
+  font-size: 11px;
+  transition: color 120ms ease, background-color 120ms ease;
+}
+
+.agro-select-panel [data-pc-section='option']:not([data-p-disabled='true']):not([data-p-selected='true']):hover,
+.agro-select-panel [data-pc-section='option'][data-p-focused='true'] {
+  color: #145235;
+  background: #eef7ef;
+}
+
+.agro-select-panel [data-pc-section='option'][data-p-selected='true'] {
+  color: #145235;
+  background: #e5f1e6;
+  font-weight: 700;
+}
+
+@media (max-width: 480px) {
+  .agro-dialog [data-pc-section='header'] {
+    padding: 15px 16px;
+    font-size: 14px;
+  }
+
+  .agro-dialog [data-pc-section='content'] {
+    padding: 16px;
+  }
+}

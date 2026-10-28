@@ -1,0 +1,101 @@
+<div class="screen-stack">
+  <section class="screen-banner">
+    <div class="title-block">
+      <span class="screen-icon">▧</span>
+      <div><div class="title-line"><h1>Gestión Agronómica &amp; Campo</h1><span class="title-badge">{{ totalHectares() }} ha monitoreadas</span></div><p>Teledetección satelital NDVI, estado fenológico por lote y telemática de tractores</p></div>
+    </div>
+    <div class="banner-actions">
+      <div class="view-switch">
+        <button type="button" [class.selected]="subTab() === 'lotes'" (click)="subTab.set('lotes')">Lotes</button>
+        <button type="button" [class.selected]="subTab() === 'maquinaria'" (click)="subTab.set('maquinaria')">Maquinaria</button>
+        <button type="button" [class.selected]="subTab() === 'calculadora'" (click)="subTab.set('calculadora')">Calculadora</button>
+      </div>
+      <p-button label="Registrar labor" icon="pi pi-plus" (onClick)="openNewLabor.emit()" />
+    </div>
+  </section>
+
+  @if (subTab() === 'lotes') {
+    <div class="field-layout">
+      <div class="field-main">
+        <section class="panel map-panel">
+          <div class="panel-heading">
+            <div><span class="eyebrow">Índice de vegetación · vista satelital</span><h2>Mosaico de lotes</h2></div>
+            <div class="layer-switch">
+              <button type="button" [class.selected]="mapLayer() === 'ndvi'" (click)="mapLayer.set('ndvi')">NDVI</button>
+              <button type="button" [class.selected]="mapLayer() === 'humedad'" (click)="mapLayer.set('humedad')">Humedad</button>
+              <button type="button" [class.selected]="mapLayer() === 'rinde'" (click)="mapLayer.set('rinde')">Rinde</button>
+            </div>
+          </div>
+          <div class="field-map" [class.humidity-layer]="mapLayer() === 'humedad'" [class.yield-layer]="mapLayer() === 'rinde'">
+            @for (lote of data.lotes(); track lote.id) {
+              <button
+                type="button"
+                class="map-lot"
+                [class.active]="selectedLote().id === lote.id"
+                [style.left.%]="lote.coordinates.x"
+                [style.top.%]="lote.coordinates.y"
+                [style.width.%]="lote.coordinates.width"
+                [style.height.%]="lote.coordinates.height"
+                (click)="selectLote(lote)"
+              >
+                <strong>{{ lote.name }}</strong><span>{{ lote.crop }} · {{ lote.hectares }} ha</span>
+              </button>
+            }
+          </div>
+          <div class="map-legend"><span><i class="health-good"></i>Vigor alto</span><span><i class="health-medium"></i>Vigor medio</span><span>Fuente: datos demostrativos</span></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading"><div><span class="eyebrow">Campaña agrícola 2025/26</span><h2>Detalle de lotes</h2></div><span class="soft-badge">{{ filteredLotes().length }} lotes</span></div>
+          <div class="filter-row">
+            <span>Filtrar cultivo:</span>
+            @for (crop of ['todos', 'Soja', 'Maíz', 'Trigo', 'Pastura']; track crop) {
+              <button type="button" class="filter-chip" [class.selected]="filterCrop() === crop" (click)="filterCrop.set(crop)">{{ crop }}</button>
+            }
+          </div>
+          <p-table [value]="filteredLotes()" dataKey="id" [rowHover]="true" responsiveLayout="scroll">
+            <ng-template #header><tr><th>Lote / cultivo</th><th>Superficie</th><th>Etapa fenológica</th><th>Estado</th></tr></ng-template>
+            <ng-template #body let-lote><tr (click)="selectLote(lote)" [class.row-selected]="selectedLote().id === lote.id"><td><strong>{{ lote.name }}</strong><small class="table-subtitle">{{ lote.crop }} · {{ lote.variety }}</small></td><td>{{ lote.hectares }} ha</td><td>{{ lote.phenologyStage }}</td><td><span class="status-pill" [class.needs-attention]="lote.status === 'Atención'">{{ lote.status }}</span></td></tr></ng-template>
+          </p-table>
+        </section>
+      </div>
+
+      <aside class="panel detail-panel">
+        <span class="eyebrow">Ficha del lote</span>
+        <h2>{{ selectedLote().name }}</h2>
+        <span class="soft-badge">{{ selectedLote().crop }} · {{ selectedLote().hectares }} ha</span>
+        <div class="health-score"><strong>{{ selectedLote().currentHealthScore }}</strong><span>/100 índice de salud del cultivo</span></div>
+        <dl>
+          <div><dt>Variedad</dt><dd>{{ selectedLote().variety }}</dd></div>
+          <div><dt>Etapa</dt><dd>{{ selectedLote().phenologyStage }}</dd></div>
+          <div><dt>Tipo de suelo</dt><dd>{{ selectedLote().soilType }}</dd></div>
+          <div><dt>Fecha de siembra</dt><dd>{{ selectedLote().sowingDate }}</dd></div>
+          <div><dt>Cosecha estimada</dt><dd>{{ selectedLote().estimatedHarvest }}</dd></div>
+          <div><dt>Rinde objetivo</dt><dd>{{ selectedLote().targetYieldQq }} qq/ha</dd></div>
+        </dl>
+        <div class="last-activity"><span class="eyebrow">Última actividad</span><p>{{ selectedLote().lastActivity }}</p></div>
+        <p-button label="Registrar actividad en lote" icon="pi pi-plus" (onClick)="openNewLabor.emit()" />
+        <p-button label="Ver historial completo" [outlined]="true" (onClick)="exportHistory()" />
+      </aside>
+    </div>
+  } @else if (subTab() === 'maquinaria') {
+    <section class="panel">
+      <div class="panel-heading"><div><span class="eyebrow">Flota agrícola</span><h2>Maquinaria y telemática</h2></div><p-button label="Agregar maquinaria" icon="pi pi-plus" (onClick)="openNewMachinery.emit()" /></div>
+      <p-table [value]="data.machinery()" dataKey="id" [rowHover]="true" responsiveLayout="scroll">
+        <ng-template #header><tr><th>Equipo</th><th>Tipo / modelo</th><th>Estado</th><th>Horómetro</th><th>Combustible</th><th>Operador</th><th>Ubicación</th></tr></ng-template>
+        <ng-template #body let-machine><tr><td><strong>{{ machine.name }}</strong><small class="table-subtitle">Año {{ machine.year }}</small></td><td>{{ machine.type }} · {{ machine.model }}</td><td><span class="status-pill" [class.needs-attention]="machine.status === 'En Mantenimiento'">{{ machine.status }}</span></td><td>{{ machine.engineHours }} h</td><td>{{ machine.fuelPercent }}%</td><td>{{ machine.currentOperator }}</td><td>{{ machine.lastLocation }}</td></tr></ng-template>
+      </p-table>
+    </section>
+  } @else {
+    <section class="calculator-layout">
+      <article class="panel calculator-panel">
+        <span class="eyebrow">Herramienta de aplicación</span><h2>Calculadora de caldo y dosis</h2>
+        <p>Calcula la superficie que puede cubrir el tanque y la cantidad de producto necesaria.</p>
+        <label>Capacidad del tanque (litros)<p-inputnumber [ngModel]="calcTankLiters()" (ngModelChange)="calcTankLiters.set($event ?? 0)" [min]="0" inputId="tank-liters" /></label>
+        <label>Volumen de aplicación (L/ha)<p-inputnumber [ngModel]="calcDoseLitersHa()" (ngModelChange)="calcDoseLitersHa.set($event ?? 0)" [min]="0" inputId="dose-liters" /></label>
+        <label>Dosis de producto (L/ha)<p-inputnumber [ngModel]="calcProductDoseHa()" (ngModelChange)="calcProductDoseHa.set($event ?? 0)" [min]="0" [minFractionDigits]="1" inputId="product-dose" /></label>
+      </article>
+      <article class="result-card"><span class="eyebrow">Resultado por tanque</span><strong>{{ hectaresPerTank() | number:'1.0-1' }} ha</strong><span>Superficie de cobertura</span><div class="result-divider"></div><strong>{{ productPerTank() | number:'1.0-1' }} L</strong><span>Producto requerido</span></article>
+    </section>
+  }
+</div>

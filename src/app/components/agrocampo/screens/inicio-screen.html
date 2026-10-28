@@ -1,0 +1,132 @@
+<div class="screen-stack">
+  <section class="page-heading">
+    <span class="eyebrow">Panel operativo</span>
+    <h1>Resumen de la explotación</h1>
+    <p>Clima, recursos y tareas clave de tu establecimiento.</p>
+  </section>
+
+  <section class="weather-panel">
+    <div class="weather-heading">
+      <div>
+        <span class="eyebrow">Estación meteorológica automática de campo</span>
+        <h2>Clima y suelo agronómico</h2>
+        <p>{{ data.weather().locationName }} · Actualizado hace 4 minutos</p>
+      </div>
+      <span class="spray-status"><span></span>Condiciones de pulverización: óptimas</span>
+    </div>
+    <div class="weather-data">
+      <div class="temperature">
+        <strong>{{ data.weather().temp }}°C</strong>
+        <span>{{ data.weather().condition }} · Sensación 25.1°C</span>
+      </div>
+      <div class="weather-stat"><span>Humedad de suelo</span><strong>{{ data.weather().soilMoisture }}%</strong><small>Capacidad de campo adecuada</small></div>
+      <div class="weather-stat"><span>Viento en lote</span><strong>{{ data.weather().windSpeed }} km/h</strong><small>Rumbo {{ data.weather().windDirection }} · Sin deriva</small></div>
+      <div class="weather-stat"><span>Pluviómetro 7d</span><strong>{{ data.weather().rainLastWeek }} mm</strong><small>+ {{ data.weather().rainForecast }} mm en 48 hs</small></div>
+      <div class="weather-stat"><span>Evapotranspiración</span><strong>{{ data.weather().evapotranspiration }} mm/d</strong><small>Demanda hídrica normal</small></div>
+    </div>
+  </section>
+
+  <section class="kpi-grid" aria-label="Resumen de la explotación">
+    <button type="button" class="kpi-card" (click)="navigateTab.emit('campo')">
+      <span class="kpi-icon">▧</span><span class="kpi-label">Campo y lotes</span>
+      <strong>{{ totalHectares() }} ha</strong><span class="kpi-foot">4 lotes bajo siembra <b>Ver mapa →</b></span>
+    </button>
+    <button type="button" class="kpi-card" (click)="navigateTab.emit('ganado')">
+      <span class="kpi-icon">♧</span><span class="kpi-label">Existencia ganadera</span>
+      <strong>642</strong><span class="kpi-foot">Cabezas bovinas registradas <b>Ver rodeo →</b></span>
+    </button>
+    <button type="button" class="kpi-card" (click)="navigateTab.emit('galpones')">
+      <span class="kpi-icon">▤</span><span class="kpi-label">Galpones y silos</span>
+      <strong>{{ data.facilities().length }} instalaciones</strong><span class="kpi-foot">Capacidad ocupada: <b>74%</b></span>
+    </button>
+    <button type="button" class="kpi-card" (click)="navigateTab.emit('campo')">
+      <span class="kpi-icon">🚜</span><span class="kpi-label">Maquinaria activa</span>
+      <strong>{{ activeMachinery() }}/{{ data.machinery().length }}</strong><span class="kpi-foot">En operación o listas <b>Ver flota →</b></span>
+    </button>
+  </section>
+
+  <section class="content-grid">
+    <div class="column-stack">
+      <article class="panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">Ciclo agrícola 2025/26</span><h2>Monitoreo de lotes activos</h2></div>
+          <p-button label="Ver todos" [text]="true" (onClick)="navigateTab.emit('campo')" />
+        </div>
+        <div class="lot-grid">
+          @for (lote of data.lotes(); track lote.id) {
+            <button type="button" class="lot-card" (click)="navigateTab.emit('campo')">
+              <span class="lot-tag">{{ lote.crop }}</span>
+              <strong>{{ lote.name }}</strong>
+              <span>{{ lote.variety }} · {{ lote.hectares }} ha</span>
+              <span class="lot-footer">Etapa: {{ lote.phenologyStage }} <b>{{ lote.targetYieldQq }} qq/ha</b></span>
+            </button>
+          }
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading tasks-heading">
+          <div><span class="eyebrow">Plan operativo</span><h2>Labores y tareas del día</h2></div>
+          <span class="pending-count">{{ pendingTasks().length }} pendientes</span>
+        </div>
+        <div class="task-toolbar">
+          <div class="filter-group" role="group" aria-label="Filtrar tareas">
+            <button type="button" [class.selected]="taskFilter() === 'todos'" (click)="taskFilter.set('todos')">Todas</button>
+            <button type="button" [class.selected]="taskFilter() === 'pendientes'" (click)="taskFilter.set('pendientes')">Pendientes</button>
+            <button type="button" [class.selected]="taskFilter() === 'completadas'" (click)="taskFilter.set('completadas')">Completadas</button>
+          </div>
+          <p-button label="Nueva labor" icon="pi pi-plus" (onClick)="openNewTask.emit()" />
+        </div>
+        <div class="task-list">
+          @for (task of filteredTasks(); track task.id) {
+            <article class="task-row">
+              <button type="button" class="task-toggle" [attr.aria-label]="task.completed ? 'Marcar pendiente' : 'Completar tarea'" (click)="data.toggleTask(task.id)">
+                {{ task.completed ? '✓' : '○' }}
+              </button>
+              <div class="task-info">
+                <strong [class.completed]="task.completed">{{ task.title }}</strong>
+                <span>Asignado: {{ task.assignee }} · Lugar: {{ task.location }} · {{ task.date }}</span>
+              </div>
+              <span class="priority" [class.high]="task.priority === 'Alta'">Prioridad {{ task.priority }}</span>
+            </article>
+          } @empty {
+            <p class="empty-state">No hay tareas para este filtro.</p>
+          }
+        </div>
+      </article>
+    </div>
+
+    <aside class="column-stack">
+      <article class="panel alerts-panel">
+        <div class="panel-heading"><div><span class="eyebrow">En tiempo real</span><h2>Alertas agronómicas</h2></div><span class="alert-count">{{ data.alerts().length }}</span></div>
+        @for (alert of data.alerts(); track alert.id) {
+          <button type="button" class="alert-card" [class.critical]="alert.type === 'critical'" [class.warning]="alert.type === 'warning'" (click)="alert.tabTarget && navigateTab.emit(alert.tabTarget)">
+            <span><strong>{{ alert.title }}</strong><small>{{ alert.timestamp }}</small></span>
+            <p>{{ alert.description }}</p>
+            @if (alert.tabTarget) { <b>Ir a la sección →</b> }
+          </button>
+        }
+      </article>
+
+      <article class="panel sensors-panel">
+        <div class="panel-heading"><div><span class="eyebrow">En vivo</span><h2>Sensores IoT · silos y acopio</h2></div><span class="live-status">Activo</span></div>
+        @for (facility of data.facilities().slice(2, 4); track facility.id) {
+          <button type="button" class="sensor-row" (click)="navigateTab.emit('galpones')">
+            <span><strong>{{ facility.name }}</strong><small>{{ facility.type }}</small></span>
+            <span class="sensor-reading">{{ facility.temperatureC }}°C · {{ facility.humidityPercent }}%<small>{{ facility.status }}</small></span>
+          </button>
+        }
+      </article>
+
+      <article class="panel">
+        <span class="eyebrow">Accesos rápidos de operación</span>
+        <div class="shortcut-grid">
+          <p-button label="🌾 Mosaico lotes" [outlined]="true" (onClick)="navigateTab.emit('campo')" />
+          <p-button label="🐮 Pesaje manga" [outlined]="true" (onClick)="navigateTab.emit('ganado')" />
+          <p-button label="📦 Stock insumos" [outlined]="true" (onClick)="navigateTab.emit('galpones')" />
+          <p-button label="📄 Libro de campo" [outlined]="true" (onClick)="navigateTab.emit('ajustes')" />
+        </div>
+      </article>
+    </aside>
+  </section>
+</div>

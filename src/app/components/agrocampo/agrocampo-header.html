@@ -1,0 +1,86 @@
+<header class="app-header">
+  <div class="utility-bar">
+    <div class="online-indicator"><span></span>Sistema Agropecuario en Línea · Servidor Pergamino</div>
+    <span class="utility-detail">
+      Coordenadas: <strong>33°53'S 60°34'W</strong> · Lluvia última semana:
+      <strong>{{ weather().rainLastWeek }} mm</strong>
+    </span>
+    <span class="sync-status">✓ Sincronización automática activa</span>
+    <span class="support">Soporte técnico rural: 0800-AGRO-24H</span>
+  </div>
+
+  <div class="main-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">🌾</span>
+      <div class="brand-details">
+        <div class="brand-line">
+          <strong>AgroCampo</strong>
+          <div class="campaign-wrap">
+            <button
+              type="button"
+              class="campaign-button"
+              aria-haspopup="menu"
+              [attr.aria-expanded]="campaignMenuOpen()"
+              (click)="campaignMenuOpen.update((open) => !open)"
+            >
+              {{ campaign() }} <span aria-hidden="true">⌄</span>
+            </button>
+            @if (campaignMenuOpen()) {
+              <div class="campaign-menu" role="menu">
+                <button type="button" role="menuitem" (click)="selectCampaign('Campaña 2025/26')">
+                  Campaña 2025/26
+                </button>
+                <button type="button" role="menuitem" (click)="selectCampaign('Campaña 2024/25')">
+                  Campaña 2024/25
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+        <span class="establishment">Establecimiento San Isidro · 930 ha</span>
+      </div>
+    </div>
+
+    <app-agrocampo-navigation
+      class="desktop-nav"
+      variant="sidebar"
+      [activeTab]="activeTab()"
+      [unreadAlertsCount]="alerts().length"
+      (tabSelected)="tabSelected.emit($event)"
+    />
+
+    <div class="header-actions">
+      <button type="button" class="weather-pill" (click)="tabSelected.emit('inicio')">
+        <span class="weather-icon" aria-hidden="true">☀</span>
+        <span><strong>{{ weather().temp }}°C</strong> · Viento {{ weather().windSpeed }} km/h</span>
+      </button>
+
+      <div class="quick-actions-wrap">
+        <p-button
+          label="Nueva acción"
+          icon="pi pi-plus"
+          iconPos="left"
+          [outlined]="false"
+          styleClass="primary-action"
+          (onClick)="quickActionsOpen.update((open) => !open)"
+        />
+        @if (quickActionsOpen()) {
+          <div class="quick-actions-menu">
+            <button type="button" (click)="openDialog('labor')">🚜 Registrar labor de campo</button>
+            <button type="button" (click)="openDialog('animal')">🐮 Alta de bovino / caravana</button>
+            <button type="button" (click)="openDialog('item')">📦 Cargar insumo en silo/galpón</button>
+          </div>
+        }
+      </div>
+
+      <p-button
+        label="Alertas"
+        icon="pi pi-bell"
+        [outlined]="true"
+        styleClass="alert-action"
+        [badge]="alerts().length.toString()"
+        (onClick)="alertsRequested.emit()"
+      />
+    </div>
+  </div>
+</header>

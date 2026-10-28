@@ -1,0 +1,52 @@
+:host { position: fixed; z-index: 30; inset: 0 auto 0 0; display: block; width: 224px; color: #fff; background: #124c33; }
+.app-header { height: 100%; }
+.utility-bar { display: none; }
+.main-header { display: flex; height: 100%; flex-direction: column; align-items: stretch; gap: 0; padding: 24px 12px 16px; }
+.brand, .brand-line, .header-actions { display: flex; align-items: center; }
+.brand { flex: 0 0 auto; align-items: flex-start; gap: 10px; padding: 0 4px 22px; }
+.brand-mark { display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center; border-radius: 12px; color: #124c33; background: #f5bb36; font-size: 20px; }
+.brand-details { min-width: 0; }
+.brand-line { flex-wrap: wrap; gap: 7px; }
+.brand-line > strong { color: #fff; font-family: Georgia, serif; font-size: 20px; line-height: 1.15; }
+.establishment { display: block; margin-top: 7px; color: #c4d7ca; font-size: 10px; line-height: 1.45; }
+.campaign-wrap, .quick-actions-wrap { position: relative; }
+.campaign-button { display: flex; align-items: center; gap: 5px; padding: 4px 8px; border: 1px solid #ffffff38; border-radius: 999px; color: #fff; background: #ffffff12; cursor: pointer; font: inherit; font-size: 9px; font-weight: 700; }
+.campaign-menu, .quick-actions-menu { position: absolute; z-index: 50; top: calc(100% + 7px); right: 0; min-width: 190px; padding: 5px; border: 1px solid #e1e9e3; border-radius: 12px; color: #243b2d; background: #fff; box-shadow: 0 12px 28px #1b2d2318; }
+.quick-actions-menu {
+  top: auto;
+  right: 0;
+  bottom: calc(100% + 8px);
+  max-width: calc(100vw - 24px);
+}
+.campaign-menu button, .quick-actions-menu button { display: block; width: 100%; padding: 9px 10px; border: 0; border-radius: 7px; color: #243b2d; background: transparent; cursor: pointer; text-align: left; font: inherit; font-size: 11px; }
+.campaign-menu button:hover, .quick-actions-menu button:hover { background: #eef7ef; }
+.desktop-nav { width: 100%; }
+.header-actions { flex: 0 0 auto; flex-direction: column; align-items: stretch; gap: 8px; margin-top: auto; padding-top: 18px; }
+.weather-pill { display: flex; align-items: center; gap: 9px; padding: 10px; border: 1px solid #ffffff22; border-radius: 10px; color: #d2e1d6; background: #ffffff0b; cursor: pointer; text-align: left; font: inherit; font-size: 10px; }
+.weather-pill strong { color: #fff; }
+.weather-icon { color: #f5bb36; font-size: 17px; }
+:host ::ng-deep .primary-action, :host ::ng-deep .alert-action { width: 100%; min-height: 38px; justify-content: flex-start; padding: 0 11px; border: 1px solid #ffffff3d; border-radius: 9px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+:host ::ng-deep .primary-action { color: #fff; background: #1e704c; }
+:host ::ng-deep .primary-action:hover { background: #268058; }
+:host ::ng-deep .alert-action { color: #fff; background: transparent; }
+:host ::ng-deep .alert-action:hover { background: #ffffff12; }
+@media (max-width: 760px) {
+  :host { position: sticky; inset: auto; width: 100%; height: auto; color: inherit; background: #fff; }
+  .main-header { height: auto; min-height: 64px; flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 14px; }
+  .brand { align-items: center; gap: 8px; padding: 0; }
+  .brand-mark { width: 36px; height: 36px; }
+  .brand-line { flex-wrap: nowrap; }
+  .brand-line > strong { color: #143827; font-family: inherit; font-size: 15px; }
+  .establishment { margin-top: 2px; color: #68766d; font-size: 9px; }
+  .campaign-button { border-color: #d6e8d9; color: #145235; background: #eff8f0; }
+  .desktop-nav, .weather-pill { display: none; }
+  .header-actions { flex-direction: row; align-items: center; gap: 6px; margin: 0; padding: 0; }
+  .quick-actions-menu {
+    top: calc(100% + 8px);
+    right: 0;
+    bottom: auto;
+  }
+  :host ::ng-deep .primary-action, :host ::ng-deep .alert-action { width: 38px; min-width: 38px; justify-content: center; padding: 0; border-color: #176b45; color: #176b45; background: #fff; }
+  :host ::ng-deep .primary-action { color: #fff; background: #176b45; }
+  :host ::ng-deep .primary-action [data-pc-section='label'], :host ::ng-deep .alert-action [data-pc-section='label'] { display: none; }
+}

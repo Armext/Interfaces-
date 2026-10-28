@@ -1,5 +1,9 @@
 # Agrocampo
 
+## PrimeNG licensing
+
+The app reads the PrimeUI license from the `PRIMEUI_LICENSE` environment variable at server runtime. Configure it in the deployment environment; do not commit the key. The `/runtime-config.js` endpoint exposes the value to the browser because PrimeNG validates its license client-side. Use only a key authorized for client-side use.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.2.
 
 ## Development server

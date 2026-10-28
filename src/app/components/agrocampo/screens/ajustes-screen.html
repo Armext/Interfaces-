@@ -1,0 +1,47 @@
+<div class="screen-stack">
+  <section class="screen-banner">
+    <div class="title-block"><span class="screen-icon">⚙</span><div><div class="title-line"><h1>Configuración &amp; Parámetros Rurales</h1><span class="title-badge">Web Admin v2.4</span></div><p>Administración de la explotación agropecuaria, usuarios autorizados y exportación de reportes</p></div></div>
+    @if (savedNotification()) { <span class="saved-message">✓ Ajustes guardados con éxito</span> }
+  </section>
+
+  <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()" class="settings-grid">
+    <section class="panel">
+      <h2>📍 Ficha catastral del establecimiento</h2>
+      <div class="form-grid">
+        <label>Nombre de la explotación<input pInputText formControlName="establishmentName" /></label>
+        <label>CUIT / RENSPA ganadero<input pInputText formControlName="cuit" /></label>
+        <label class="wide">Localidad y coordenadas geográficas<input pInputText formControlName="location" /></label>
+        <label>Superficie total (ha)<p-inputnumber formControlName="totalHectares" [min]="1" inputId="total-hectares" /></label>
+        <label>Sistema de unidades<select formControlName="metricUnit"><option value="metric">Métrico (ha, qq, kg, L)</option><option value="imperial">Imperial (acres, bushels, lb)</option></select></label>
+      </div>
+      @if (settingsForm.controls.establishmentName.touched && settingsForm.controls.establishmentName.invalid) { <small class="validation-message">El nombre del establecimiento es obligatorio.</small> }
+      <p-button type="submit" label="Guardar cambios del establecimiento" icon="pi pi-check" />
+    </section>
+
+    <section class="panel">
+      <h2>🛡 Preferencias operativas</h2>
+      <label class="setting-row"><span><strong>Almacenamiento local offline</strong><small>Permite registrar labores en el potrero sin conexión 4G y sincronizar al regresar a la base.</small></span><input type="checkbox" formControlName="offlineSync" /></label>
+      <label class="field-label">Límite de alerta de viento (km/h)<p-inputnumber formControlName="windAlertLimit" [min]="0" inputId="wind-alert-limit" /></label>
+      <div class="server-status"><span class="online-dot"></span><span><strong>Base de datos sincronizada con servidor central (100%)</strong><small>Hoy 17:15 hs</small></span></div>
+    </section>
+
+    <section class="panel team-panel">
+      <h2>♙ Equipo y operadores de campo</h2>
+      <div class="team-list">
+        <article><span><strong>Ing. Agr. Santiago Méndez</strong><small>Asesor Técnico Agrónomo · Planificación de Siembras</small></span><b>Administrador</b></article>
+        <article><span><strong>Dr. Roberto Vallejos</strong><small>Médico Veterinario · Sanidad Animal &amp; Control Reproductivo</small></span><b>Sanidad</b></article>
+        <article><span><strong>Lucas Almada</strong><small>Operador Principal de Maquinaria y Cosecha</small></span><b>Maquinista</b></article>
+      </div>
+    </section>
+
+    <section class="panel report-panel">
+      <h2>⇩ Exportación de reportes oficiales</h2>
+      <p>Descarga archivos CSV generados con los datos del establecimiento.</p>
+      <div class="report-grid">
+        <article class="report-card"><span>▦</span><strong>Libro de Campo Completo</strong><small>Cultivos, insumos y rindes</small><p-button label="Descargar CSV" icon="pi pi-download" [outlined]="true" (onClick)="exportCsv('Libro de Campo Completo')" /></article>
+        <article class="report-card"><span>♧</span><strong>Censo y Pesajes Ganaderos SENASA</strong><small>Registros de trazabilidad bovina</small><p-button label="Descargar CSV" icon="pi pi-download" [outlined]="true" (onClick)="exportCsv('Censo y Pesajes Ganaderos SENASA')" /></article>
+        <article class="report-card"><span>▤</span><strong>Inventario de Granos y Silos</strong><small>Existencias e instalaciones</small><p-button label="Descargar CSV" icon="pi pi-download" [outlined]="true" (onClick)="exportCsv('Inventario de Granos y Silos')" /></article>
+      </div>
+    </section>
+  </form>
+</div>

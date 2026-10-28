@@ -1,0 +1,89 @@
+<div class="app-shell">
+  <app-agrocampo-header
+    [activeTab]="activeTab()"
+    [weather]="data.weather()"
+    [alerts]="data.alerts()"
+    [campaign]="campaign()"
+    (tabSelected)="navigateTo($event)"
+    (campaignSelected)="campaign.set($event)"
+    (dialogRequested)="openDialog($event)"
+    (alertsRequested)="alertsOpen.set(true)"
+  />
+
+  <main class="main-content">
+    <div class="status-ribbon">
+      <div><span>Establecimiento San Isidro · Pergamino</span><span>/</span><b>{{ activeTab() }}</b></div>
+      <div class="farm-summary"><span>Superficie total: <strong>1.450 ha</strong></span><i></i><span>Rodeo: <strong>642 cabezas</strong></span><i></i><span>Silos: <strong>74% ocupado</strong></span></div>
+    </div>
+
+    @switch (activeTab()) {
+      @case ('inicio') {
+        <app-inicio-screen (navigateTab)="navigateTo($event)" (openNewTask)="openDialog('task')" />
+      }
+      @case ('campo') {
+        <app-campo-screen (openNewLabor)="openDialog('labor')" (openNewMachinery)="openDialog('labor')" />
+      }
+      @case ('ganado') {
+        <app-ganado-screen (openNewAnimal)="openDialog('animal')" (openWeighModal)="openDialog('animal')" />
+      }
+      @case ('galpones') {
+        <app-galpones-screen (openNewItem)="openDialog('item')" (openStockMovement)="openDialog('item')" />
+      }
+      @case ('ajustes') {
+        <app-ajustes-screen />
+      }
+    }
+  </main>
+
+  <app-agrocampo-navigation
+    [activeTab]="activeTab()"
+    [unreadAlertsCount]="data.alerts().length"
+    variant="bottom"
+    (tabSelected)="navigateTo($event)"
+  />
+
+  <footer class="app-footer">
+    <div><strong>AgroCampo Web</strong><span>·</span><span>Software de Gestión Agropecuaria Integral</span></div>
+    <nav aria-label="Secciones">
+      <button type="button" (click)="navigateTo('inicio')">Inicio</button><span>·</span>
+      <button type="button" (click)="navigateTo('campo')">Campo</button><span>·</span>
+      <button type="button" (click)="navigateTo('ganado')">Ganado</button><span>·</span>
+      <button type="button" (click)="navigateTo('galpones')">Galpones</button><span>·</span>
+      <button type="button" (click)="navigateTo('ajustes')">Ajustes</button>
+    </nav>
+  </footer>
+
+  <app-agrocampo-dialogs
+    [dialog]="activeDialog()"
+    [lotes]="data.lotes()"
+    (closed)="closeDialog()"
+    (addLabor)="addLabor($event)"
+    (addAnimal)="data.addAnimal($event)"
+    (addItem)="data.addItem($event)"
+    (addTask)="data.addTask($event)"
+  />
+
+  <p-dialog
+    header="Centro de Alertas Agronómicas"
+    styleClass="agro-dialog"
+    [visible]="alertsOpen()"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    position="right"
+    [style]="{ width: 'min(calc(100vw - 2rem), 30rem)', height: '100vh' }"
+    (visibleChange)="alertsOpen.set($event)"
+  >
+    <p class="alerts-intro">Incidencias operativas, sanitarias y climáticas</p>
+    <div class="alerts-list">
+      @for (alert of data.alerts(); track alert.id) {
+        <button type="button" class="drawer-alert" (click)="goToAlert(alert.tabTarget)">
+          <span><strong>{{ alert.title }}</strong><small>{{ alert.timestamp }}</small></span>
+          <p>{{ alert.description }}</p>
+          @if (alert.tabTarget) { <b>Ir a la sección →</b> }
+        </button>
+      }
+    </div>
+    <p-button label="Cerrar panel" [outlined]="true" (onClick)="alertsOpen.set(false)" />
+  </p-dialog>
+</div>

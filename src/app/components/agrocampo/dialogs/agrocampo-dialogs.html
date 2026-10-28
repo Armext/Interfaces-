@@ -1,0 +1,82 @@
+<p-dialog header="Registrar Labor de Campo" styleClass="agro-dialog" [visible]="dialog() === 'labor'" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: 'min(calc(100vw - 2rem), 32rem)' }" (onHide)="closed.emit()">
+  <form [formGroup]="laborForm" (ngSubmit)="submitLabor()" class="dialog-form">
+    <div class="select-field">
+      <label for="labor-lote">Lote / Parcela</label>
+      <p-select
+        inputId="labor-lote"
+        formControlName="loteId"
+        [options]="loteOptions()"
+        optionLabel="label"
+        optionValue="value"
+        appendTo="body"
+        panelStyleClass="agro-select-panel"
+        [overlayOptions]="selectOverlayOptions"
+      />
+    </div>
+    <div class="select-field">
+      <label for="labor-type">Tipo de labor</label>
+      <p-select
+        inputId="labor-type"
+        formControlName="laborType"
+        [options]="laborTypes"
+        appendTo="body"
+        panelStyleClass="agro-select-panel"
+        [overlayOptions]="selectOverlayOptions"
+      />
+    </div>
+    <label>Detalle de dosis y maquinaria<input pInputText formControlName="details" required placeholder="Ej.: Fungicida 500cc/ha con tractor John Deere" /></label>
+    @if (laborForm.controls.details.touched && laborForm.controls.details.invalid) { <small class="validation-message">Ingresa el detalle de la labor.</small> }
+    <footer><p-button label="Cancelar" [outlined]="true" type="button" (onClick)="closed.emit()" /><p-button label="Guardar labor" icon="pi pi-check" type="submit" /></footer>
+  </form>
+</p-dialog>
+
+<p-dialog header="Alta de Bovino / Caravana" styleClass="agro-dialog" [visible]="dialog() === 'animal'" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: 'min(calc(100vw - 2rem), 32rem)' }" (onHide)="closed.emit()">
+  <form [formGroup]="animalForm" (ngSubmit)="submitAnimal()" class="dialog-form">
+    <label>Número de caravana (arete)<input pInputText formControlName="caravana" required /></label>
+    <div class="form-row">
+      <div class="select-field">
+        <label for="animal-category">Categoría</label>
+        <p-select inputId="animal-category" formControlName="category" [options]="cattleCategories" appendTo="body" panelStyleClass="agro-select-panel" [overlayOptions]="selectOverlayOptions" />
+      </div>
+      <div class="select-field">
+        <label for="animal-breed">Raza</label>
+        <p-select inputId="animal-breed" formControlName="breed" [options]="cattleBreeds" appendTo="body" panelStyleClass="agro-select-panel" [overlayOptions]="selectOverlayOptions" />
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Peso inicial (kg)<p-inputnumber formControlName="weightKg" [min]="1" inputId="animal-weight" /></label>
+      <label>Potrero asignado<input pInputText formControlName="potrero" /></label>
+    </div>
+    <footer><p-button label="Cancelar" [outlined]="true" type="button" (onClick)="closed.emit()" /><p-button label="Guardar bovino" icon="pi pi-check" type="submit" /></footer>
+  </form>
+</p-dialog>
+
+<p-dialog header="Cargar Insumo o Semilla" styleClass="agro-dialog" [visible]="dialog() === 'item'" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: 'min(calc(100vw - 2rem), 32rem)' }" (onHide)="closed.emit()">
+  <form [formGroup]="itemForm" (ngSubmit)="submitItem()" class="dialog-form">
+    <label>Nombre comercial del insumo<input pInputText formControlName="name" required placeholder="Ej.: Fungicida Amistar Xtra" /></label>
+    <div class="select-field">
+      <label for="item-category">Rubro / Categoría</label>
+      <p-select inputId="item-category" formControlName="category" [options]="inventoryCategories" appendTo="body" panelStyleClass="agro-select-panel" [overlayOptions]="selectOverlayOptions" />
+    </div>
+    <div class="form-row">
+      <label>Cantidad<p-inputnumber formControlName="quantity" [min]="0" inputId="item-quantity" /></label>
+      <label>Unidad<input pInputText formControlName="unit" /></label>
+    </div>
+    <footer><p-button label="Cancelar" [outlined]="true" type="button" (onClick)="closed.emit()" /><p-button label="Guardar insumo" icon="pi pi-check" type="submit" /></footer>
+  </form>
+</p-dialog>
+
+<p-dialog header="Programar Nueva Labor / Tarea" styleClass="agro-dialog" [visible]="dialog() === 'task'" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: 'min(calc(100vw - 2rem), 32rem)' }" (onHide)="closed.emit()">
+  <form [formGroup]="taskForm" (ngSubmit)="submitTask()" class="dialog-form">
+    <label>Descripción de la labor<input pInputText formControlName="title" required placeholder="Ej.: Control de oruga cogollera en lote maíz" /></label>
+    <div class="form-row">
+      <label>Responsable<input pInputText formControlName="assignee" /></label>
+      <div class="select-field">
+        <label for="task-priority">Prioridad</label>
+        <p-select inputId="task-priority" formControlName="priority" [options]="priorities" appendTo="body" panelStyleClass="agro-select-panel" [overlayOptions]="selectOverlayOptions" />
+      </div>
+    </div>
+    <label>Ubicación<input pInputText formControlName="location" /></label>
+    <footer><p-button label="Cancelar" [outlined]="true" type="button" (onClick)="closed.emit()" /><p-button label="Crear labor" icon="pi pi-check" type="submit" /></footer>
+  </form>
+</p-dialog>

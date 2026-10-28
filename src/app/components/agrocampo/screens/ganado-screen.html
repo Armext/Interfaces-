@@ -1,0 +1,55 @@
+<div class="screen-stack">
+  <section class="screen-banner">
+    <div class="title-block"><span class="screen-icon">♧</span><div><div class="title-line"><h1>Gestión Ganadera &amp; Rodeo Bovino</h1><span class="title-badge">642 cabezas registradas</span></div><p>Trazabilidad individual con caravana oficial SENASA, pesajes de manga y sanidad reproductiva</p></div></div>
+    <div class="banner-actions"><p-button label="Cargar pesaje de manga" icon="pi pi-chart-bar" [outlined]="true" (onClick)="openWeighModal.emit()" /><p-button label="Nuevo bovino / caravana" icon="pi pi-plus" (onClick)="openNewAnimal.emit()" /></div>
+  </section>
+
+  <section class="summary-grid">
+    <article class="summary-card"><span>Existencia total</span><strong>642</strong><small>Vacas de cría (280) · Novillos (185) · Terneros (167) · Toros (10)</small></article>
+    <article class="summary-card"><span>GDP promedio (invernada)</span><strong>+0.95 <small>kg/día</small></strong><small>Ganancia diaria de peso sobre pasturas consociadas</small></article>
+    <article class="summary-card"><span>Tasa de preñez proyectada</span><strong>89.4%</strong><small>Tacto servicio de primavera completado</small></article>
+    <article class="summary-card"><span>Certificación SENASA</span><strong>Al día</strong><small>Libre de Brucelosis y Tuberculosis bovina</small></article>
+  </section>
+
+  <section class="health-campaign">
+    <span class="campaign-icon">♡</span>
+    <div><strong>Campaña de Vacunación Antiaftosa y Carbunclo 2025</strong><p>Próxima manga programada para el 18 de Octubre (210 terneros y novillos en corral central)</p></div>
+    <span class="campaign-record">Acta SENASA Nº 884-2025</span>
+  </section>
+
+  <section class="herd-layout">
+    <article class="panel herd-table">
+      <div class="panel-heading"><div><span class="eyebrow">Trazabilidad individual</span><h2>Registro de rodeo</h2></div><span class="soft-badge">{{ filteredCattle().length }} resultados</span></div>
+      <div class="table-toolbar">
+        <input pInputText type="search" placeholder="Buscar caravana, raza o potrero" [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)" />
+        <div class="category-filters" role="group" aria-label="Filtrar categoría">
+          @for (category of ['todos', 'Vaca de Cría', 'Novillo', 'Ternero', 'Toro']; track category) {
+            <button type="button" [class.selected]="selectedCategory() === category" (click)="selectedCategory.set(category)">{{ category === 'todos' ? 'Todas' : category }}</button>
+          }
+        </div>
+      </div>
+      <p-table [value]="filteredCattle()" dataKey="id" [rowHover]="true" responsiveLayout="scroll">
+        <ng-template #header><tr><th>Caravana (arete)</th><th>Categoría</th><th>Raza y sexo</th><th>Peso actual</th><th>Ganancia GDP</th><th>Potrero / lote</th><th>Sanidad</th></tr></ng-template>
+        <ng-template #body let-animal><tr (click)="selectAnimal(animal)" [class.row-selected]="selectedAnimal()?.id === animal.id"><td><strong>🏷 {{ animal.caravana }}</strong></td><td>{{ animal.category }}</td><td>{{ animal.breed }} · {{ animal.sex }}</td><td><strong>{{ animal.weightKg }} kg</strong></td><td class="growth-cell">+{{ animal.dailyWeightGainKg }} kg/d</td><td>{{ animal.potrero }}</td><td><span class="health-pill" [class.needs-attention]="animal.healthStatus !== 'Al día'">{{ animal.healthStatus }}</span></td></tr></ng-template>
+        <ng-template #emptymessage><tr><td colspan="7" class="empty-state">No hay animales para los filtros seleccionados.</td></tr></ng-template>
+      </p-table>
+    </article>
+
+    @if (selectedAnimal(); as animal) {
+      <aside class="panel animal-card">
+        <span class="eyebrow">Ficha individual</span><span class="animal-mark">♧</span>
+        <h2>Caravana {{ animal.caravana }}</h2><p>{{ animal.breed }} · {{ animal.sex }}</p>
+        <span class="soft-badge">{{ animal.category }}</span>
+        <div class="weight-highlight"><strong>{{ animal.weightKg }}<small> kg</small></strong><span>Último pesaje · {{ animal.lastWeighDate }}</span></div>
+        <dl>
+          <div><dt>Ganancia diaria</dt><dd>+{{ animal.dailyWeightGainKg }} kg/d</dd></div>
+          <div><dt>Estado reproductivo</dt><dd>{{ animal.reproductiveStatus }}</dd></div>
+          <div><dt>Potrero asignado</dt><dd>{{ animal.potrero }}</dd></div>
+          <div><dt>Estado sanitario</dt><dd>{{ animal.healthStatus }}</dd></div>
+          <div><dt>Fecha de nacimiento</dt><dd>{{ animal.birthDate }}</dd></div>
+        </dl>
+        <p-button label="Cargar pesaje de manga" icon="pi pi-chart-bar" (onClick)="openWeighModal.emit()" />
+      </aside>
+    }
+  </section>
+</div>

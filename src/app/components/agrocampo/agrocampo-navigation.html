@@ -1,0 +1,33 @@
+<nav
+  [class.top-navigation]="variant() === 'top'"
+  [class.bottom-navigation]="variant() === 'bottom'"
+  [class.sidebar-navigation]="variant() === 'sidebar'"
+  [attr.aria-label]="variant() === 'bottom' ? 'Navegación móvil' : 'Navegación principal'"
+>
+  @for (item of items; track item.id) {
+    <button
+      type="button"
+      class="navigation-item"
+      [class.active]="activeTab() === item.id"
+      [title]="item.description"
+      [attr.aria-current]="activeTab() === item.id ? 'page' : null"
+      (click)="tabSelected.emit(item.id)"
+    >
+      @if (item.id === 'ganado') {
+        <svg class="navigation-icon cattle-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7.5 7 4 4.5 3 2l4.5 1.5L10 6m6.5 1L20 4.5 21 2l-4.5 1.5L14 6" />
+          <path d="M7 7.5 5 6l-2 .5 1.5 3L6 11m11-3.5L19 6l2 .5-1.5 3L18 11" />
+          <path d="M8 7.5c1.1-1 2.4-1.5 4-1.5s2.9.5 4 1.5l1 5.5c0 4-2.3 7-5 7s-5-3-5-7l1-5.5Z" />
+          <path d="M8 14.5c1.1-.8 2.4-1.2 4-1.2s2.9.4 4 1.2c-.2 2-1.8 3.2-4 3.2s-3.8-1.2-4-3.2Z" />
+          <path d="M9.5 11h.01m5-.01h.01" />
+        </svg>
+      } @else {
+        <span class="navigation-icon" aria-hidden="true">{{ item.icon }}</span>
+      }
+      <span class="navigation-label">{{ item.label }}</span>
+      @if (item.id === 'galpones' && unreadAlertsCount() > 0 && activeTab() !== item.id) {
+        <span class="navigation-alert" aria-label="Hay alertas"></span>
+      }
+    </button>
+  }
+</nav>

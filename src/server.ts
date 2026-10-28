@@ -6,8 +6,11 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { setAgroCampoRuntimeConfig } from './app/runtime-config';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
+
+setAgroCampoRuntimeConfig({ primeUiLicense: process.env['PRIMEUI_LICENSE'] });
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
@@ -27,6 +30,17 @@ const angularApp = new AngularNodeAppEngine();
 /**
  * Serve static files from /browser
  */
+app.get('/runtime-config.js', (_req, res) => {
+  res
+    .type('application/javascript')
+    .set('Cache-Control', 'no-store')
+    .send(
+      `globalThis.__AGROCAMPO_RUNTIME_CONFIG__=${JSON.stringify({
+        primeUiLicense: process.env['PRIMEUI_LICENSE'],
+      })};`,
+    );
+});
+
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',

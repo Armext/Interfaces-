@@ -40,7 +40,7 @@
       <strong>{{ data.facilities().length }} instalaciones</strong><span class="kpi-foot">Capacidad ocupada: <b>74%</b></span>
     </button>
     <button type="button" class="kpi-card" (click)="navigateTab.emit('campo')">
-      <span class="kpi-icon">🚜</span><span class="kpi-label">Maquinaria activa</span>
+      <span class="kpi-icon pi pi-truck" aria-hidden="true"></span><span class="kpi-label">Maquinaria activa</span>
       <strong>{{ activeMachinery() }}/{{ data.machinery().length }}</strong><span class="kpi-foot">En operación o listas <b>Ver flota →</b></span>
     </button>
   </section>
@@ -121,10 +121,10 @@
       <article class="panel">
         <span class="eyebrow">Accesos rápidos de operación</span>
         <div class="shortcut-grid">
-          <p-button label="🌾 Mosaico lotes" [outlined]="true" (onClick)="navigateTab.emit('campo')" />
-          <p-button label="🐮 Pesaje manga" [outlined]="true" (onClick)="navigateTab.emit('ganado')" />
-          <p-button label="📦 Stock insumos" [outlined]="true" (onClick)="navigateTab.emit('galpones')" />
-          <p-button label="📄 Libro de campo" [outlined]="true" (onClick)="navigateTab.emit('ajustes')" />
+          <p-button label="Mosaico lotes" icon="pi pi-map" iconPos="left" [outlined]="true" (onClick)="navigateTab.emit('campo')" />
+          <p-button label="Pesaje manga" icon="pi pi-chart-bar" iconPos="left" [outlined]="true" (onClick)="navigateTab.emit('ganado')" />
+          <p-button label="Stock insumos" icon="pi pi-box" iconPos="left" [outlined]="true" (onClick)="navigateTab.emit('galpones')" />
+          <p-button label="Libro de campo" icon="pi pi-book" iconPos="left" [outlined]="true" (onClick)="navigateTab.emit('ajustes')" />
         </div>
       </article>
     </aside>

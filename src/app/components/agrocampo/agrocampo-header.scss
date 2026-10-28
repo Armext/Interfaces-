@@ -18,8 +18,10 @@
   bottom: calc(100% + 8px);
   max-width: calc(100vw - 24px);
 }
-.campaign-menu button, .quick-actions-menu button { display: block; width: 100%; padding: 9px 10px; border: 0; border-radius: 7px; color: #243b2d; background: transparent; cursor: pointer; text-align: left; font: inherit; font-size: 11px; }
-.campaign-menu button:hover, .quick-actions-menu button:hover { background: #eef7ef; }
+.campaign-menu button, .quick-actions-menu button { display: flex; width: 100%; align-items: flex-start; gap: 9px; padding: 9px 10px; border: 0; border-radius: 8px; color: #243b2d; background: transparent; cursor: pointer; text-align: left; font: inherit; font-size: 11px; line-height: 1.45; }
+.campaign-menu button:hover, .quick-actions-menu button:hover { color: #145235; background: #eef7ef; }
+.quick-actions-menu button i { flex: 0 0 16px; margin-top: 1px; color: #176b45; font-size: 14px; text-align: center; }
+.quick-actions-menu button span { min-width: 0; }
 .desktop-nav { width: 100%; }
 .header-actions { flex: 0 0 auto; flex-direction: column; align-items: stretch; gap: 8px; margin-top: auto; padding-top: 18px; }
 .weather-pill { display: flex; align-items: center; gap: 9px; padding: 10px; border: 1px solid #ffffff22; border-radius: 10px; color: #d2e1d6; background: #ffffff0b; cursor: pointer; text-align: left; font: inherit; font-size: 10px; }

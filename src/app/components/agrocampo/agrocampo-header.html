@@ -66,9 +66,18 @@
         />
         @if (quickActionsOpen()) {
           <div class="quick-actions-menu">
-            <button type="button" (click)="openDialog('labor')">🚜 Registrar labor de campo</button>
-            <button type="button" (click)="openDialog('animal')">🐮 Alta de bovino / caravana</button>
-            <button type="button" (click)="openDialog('item')">📦 Cargar insumo en silo/galpón</button>
+            <button type="button" (click)="openDialog('labor')">
+              <i class="pi pi-map" aria-hidden="true"></i>
+              <span>Registrar labor de campo</span>
+            </button>
+            <button type="button" (click)="openDialog('animal')">
+              <i class="pi pi-verified" aria-hidden="true"></i>
+              <span>Alta de bovino / caravana</span>
+            </button>
+            <button type="button" (click)="openDialog('item')">
+              <i class="pi pi-box" aria-hidden="true"></i>
+              <span>Cargar insumo en silo/galpón</span>
+            </button>
           </div>
         }
       </div>

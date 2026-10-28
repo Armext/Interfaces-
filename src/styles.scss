@@ -49,30 +49,60 @@ select {
   outline: 3px solid #176b451c;
 }
 
-.p-button {
+p-button [data-pc-name='button'] {
   display: inline-flex;
-  min-height: 35px;
+  min-height: 40px;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 7px 11px;
+  gap: 8px;
+  padding: 8px 16px;
   border: 1px solid #176b45;
-  border-radius: 8px;
+  border-radius: 999px;
   color: #fff;
-  background: #176b45;
+  background: linear-gradient(135deg, #1c7950, #176b45);
   cursor: pointer;
-  font-size: 10px;
+  font: inherit;
+  font-size: 12px;
   font-weight: 700;
+  line-height: 1.25;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
 }
 
-.p-button.p-button-outlined,
-.p-button.p-button-text {
+p-button [data-pc-name='button'][data-p='outlined'],
+p-button [data-pc-name='button'][data-p='text'] {
+  border-color: #d5e5d9;
   color: #176b45;
   background: #fff;
+  box-shadow: none;
 }
 
-.p-button:hover {
-  filter: brightness(.96);
+p-button [data-pc-name='button']:not(:disabled):hover {
+  transform: translateY(-1px);
+  border-color: #105437;
+  background: #105437;
+  box-shadow: 0 5px 12px #176b4524;
+}
+
+p-button [data-pc-name='button'][data-p='outlined']:not(:disabled):hover,
+p-button [data-pc-name='button'][data-p='text']:not(:disabled):hover {
+  border-color: #9dc6a8;
+  color: #105437;
+  background: #f2f8f3;
+  box-shadow: none;
+}
+
+p-button [data-pc-name='button']:focus-visible {
+  outline: 3px solid #176b452e;
+  outline-offset: 2px;
+}
+
+p-button [data-pc-name='button']:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .agro-dialog[data-pc-name='dialog'] {
@@ -133,7 +163,7 @@ select {
   min-height: 38px;
   padding: 0 14px;
   border: 1px solid #176b45;
-  border-radius: 9px;
+  border-radius: 999px;
   color: #fff;
   background: #176b45;
   cursor: pointer;

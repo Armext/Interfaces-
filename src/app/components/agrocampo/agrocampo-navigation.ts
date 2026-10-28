@@ -4,7 +4,6 @@ import { TabId } from '../../models/agro.models';
 interface NavigationItem {
   id: TabId;
   label: string;
-  icon: string;
   description: string;
 }
 
@@ -22,10 +21,10 @@ export class AgrocampoNavigation {
   readonly tabSelected = output<TabId>();
 
   readonly items: NavigationItem[] = [
-    { id: 'inicio', label: 'Inicio', icon: '⌂', description: 'Dashboard y clima' },
-    { id: 'campo', label: 'Campo', icon: '▧', description: 'Lotes, cultivos y maquinaria' },
-    { id: 'ganado', label: 'Ganado', icon: '🐄', description: 'Rodeo y caravanas' },
-    { id: 'galpones', label: 'Galpones', icon: '▤', description: 'Silos, sensores y stock' },
-    { id: 'ajustes', label: 'Ajustes', icon: '⚙', description: 'Configuración y reportes' },
+    { id: 'inicio', label: 'Inicio', description: 'Dashboard y clima' },
+    { id: 'campo', label: 'Campo', description: 'Lotes, cultivos y maquinaria' },
+    { id: 'ganado', label: 'Ganado', description: 'Rodeo y caravanas' },
+    { id: 'galpones', label: 'Galpones', description: 'Silos, sensores y stock' },
+    { id: 'ajustes', label: 'Ajustes', description: 'Configuración y reportes' },
   ];
 }

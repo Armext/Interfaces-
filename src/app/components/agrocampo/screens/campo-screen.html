@@ -1,16 +1,28 @@
-<div class="screen-stack">
+<div class="screen-stack field-screen">
   <section class="screen-banner">
     <div class="title-block">
-      <span class="screen-icon">▧</span>
-      <div><div class="title-line"><h1>Gestión Agronómica &amp; Campo</h1><span class="title-badge">{{ totalHectares() }} ha monitoreadas</span></div><p>Teledetección satelital NDVI, estado fenológico por lote y telemática de tractores</p></div>
+      <span class="screen-icon"><i class="pi pi-map" aria-hidden="true"></i></span>
+      <div>
+        <div class="title-line">
+          <h1>Gestión Agronómica &amp; Campo</h1>
+          <span class="title-badge">{{ totalHectares() }} ha monitoreadas</span>
+        </div>
+        <p>Teledetección satelital NDVI, estado fenológico por lote y telemática de tractores</p>
+      </div>
     </div>
     <div class="banner-actions">
-      <div class="view-switch">
+      <div class="view-switch" role="group" aria-label="Vistas de campo">
         <button type="button" [class.selected]="subTab() === 'lotes'" (click)="subTab.set('lotes')">Lotes</button>
         <button type="button" [class.selected]="subTab() === 'maquinaria'" (click)="subTab.set('maquinaria')">Maquinaria</button>
         <button type="button" [class.selected]="subTab() === 'calculadora'" (click)="subTab.set('calculadora')">Calculadora</button>
       </div>
-      <p-button label="Registrar labor" icon="pi pi-plus" (onClick)="openNewLabor.emit()" />
+      <p-button
+        label="Registrar labor"
+        icon="pi pi-plus"
+        [rounded]="true"
+        styleClass="field-action primary-action"
+        (onClick)="openNewLabor.emit()"
+      />
     </div>
   </section>
 
@@ -19,8 +31,11 @@
       <div class="field-main">
         <section class="panel map-panel">
           <div class="panel-heading">
-            <div><span class="eyebrow">Índice de vegetación · vista satelital</span><h2>Mosaico de lotes</h2></div>
-            <div class="layer-switch">
+            <div>
+              <span class="eyebrow">Índice de vegetación · vista satelital</span>
+              <h2>Mosaico de lotes</h2>
+            </div>
+            <div class="layer-switch" role="group" aria-label="Capa del mapa">
               <button type="button" [class.selected]="mapLayer() === 'ndvi'" (click)="mapLayer.set('ndvi')">NDVI</button>
               <button type="button" [class.selected]="mapLayer() === 'humedad'" (click)="mapLayer.set('humedad')">Humedad</button>
               <button type="button" [class.selected]="mapLayer() === 'rinde'" (click)="mapLayer.set('rinde')">Rinde</button>
@@ -73,14 +88,41 @@
           <div><dt>Cosecha estimada</dt><dd>{{ selectedLote().estimatedHarvest }}</dd></div>
           <div><dt>Rinde objetivo</dt><dd>{{ selectedLote().targetYieldQq }} qq/ha</dd></div>
         </dl>
-        <div class="last-activity"><span class="eyebrow">Última actividad</span><p>{{ selectedLote().lastActivity }}</p></div>
-        <p-button label="Registrar actividad en lote" icon="pi pi-plus" (onClick)="openNewLabor.emit()" />
-        <p-button label="Ver historial completo" [outlined]="true" (onClick)="exportHistory()" />
+        <div class="last-activity">
+          <span class="eyebrow">Última actividad</span>
+          <p>{{ selectedLote().lastActivity }}</p>
+        </div>
+        <div class="detail-actions">
+          <p-button
+            label="Registrar actividad en lote"
+            icon="pi pi-plus"
+            [rounded]="true"
+            styleClass="field-action primary-action"
+            (onClick)="openNewLabor.emit()"
+          />
+          <p-button
+            label="Ver historial completo"
+            icon="pi pi-history"
+            [outlined]="true"
+            [rounded]="true"
+            styleClass="field-action secondary-action"
+            (onClick)="exportHistory()"
+          />
+        </div>
       </aside>
     </div>
   } @else if (subTab() === 'maquinaria') {
     <section class="panel">
-      <div class="panel-heading"><div><span class="eyebrow">Flota agrícola</span><h2>Maquinaria y telemática</h2></div><p-button label="Agregar maquinaria" icon="pi pi-plus" (onClick)="openNewMachinery.emit()" /></div>
+      <div class="panel-heading">
+        <div><span class="eyebrow">Flota agrícola</span><h2>Maquinaria y telemática</h2></div>
+        <p-button
+          label="Agregar maquinaria"
+          icon="pi pi-plus"
+          [rounded]="true"
+          styleClass="field-action primary-action"
+          (onClick)="openNewMachinery.emit()"
+        />
+      </div>
       <p-table [value]="data.machinery()" dataKey="id" [rowHover]="true" responsiveLayout="scroll">
         <ng-template #header><tr><th>Equipo</th><th>Tipo / modelo</th><th>Estado</th><th>Horómetro</th><th>Combustible</th><th>Operador</th><th>Ubicación</th></tr></ng-template>
         <ng-template #body let-machine><tr><td><strong>{{ machine.name }}</strong><small class="table-subtitle">Año {{ machine.year }}</small></td><td>{{ machine.type }} · {{ machine.model }}</td><td><span class="status-pill" [class.needs-attention]="machine.status === 'En Mantenimiento'">{{ machine.status }}</span></td><td>{{ machine.engineHours }} h</td><td>{{ machine.fuelPercent }}%</td><td>{{ machine.currentOperator }}</td><td>{{ machine.lastLocation }}</td></tr></ng-template>

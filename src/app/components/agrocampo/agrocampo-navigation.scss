@@ -29,8 +29,21 @@ nav {
   height: 34px;
   place-items: center;
   border-radius: 20px;
-  font-size: 22px;
+  font-size: 24px;
   transition: background-color 160ms ease, color 160ms ease;
+}
+
+.tractor-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.tractor-wheel-hole {
+  fill: #fff;
+}
+
+.navigation-item.active .tractor-wheel-hole {
+  fill: #176b45;
 }
 
 .cattle-icon {
@@ -132,25 +145,45 @@ nav {
     bottom: 0;
     left: 0;
     display: flex;
-    justify-content: space-around;
-    padding: 8px max(8px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom))
+    justify-content: space-between;
+    padding: 18px max(8px, env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom))
       max(8px, env(safe-area-inset-left));
     border-top: 1px solid #e2eae4;
-    background: #fcfdfc;
+    background: #fff;
     box-shadow: 0 -4px 16px #0000000a;
   }
 
   .bottom-navigation .navigation-item {
-    min-width: 52px;
-    padding: 2px;
+    min-width: 0;
+    flex: 1;
+    gap: 7px;
+    padding: 0 3px;
   }
 
   .bottom-navigation .navigation-icon {
-    width: 52px;
-    height: 32px;
+    width: min(100%, 117px);
+    height: 63px;
+    border-radius: 32px;
+    font-size: 34px;
+  }
+
+  .bottom-navigation .tractor-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .bottom-navigation .cattle-icon {
+    width: 31px;
+    height: 31px;
   }
 
   .bottom-navigation .navigation-label {
-    font-size: 11px;
+    font-size: clamp(12px, 3.8vw, 18px);
+    font-weight: 600;
+  }
+
+  .bottom-navigation .navigation-alert {
+    top: 0;
+    right: calc(50% - 39px);
   }
 }
